@@ -24,5 +24,6 @@ $ ./gradlew testLoad
 ```
 
 ### Who do I talk to? ###
-If you have questions leave a comment at the tutorial blog article (https://brokenrhythm.blog/gradle-gatling-springboot-automation)
-You can also reach me at my LinkedIn profile: https://www.linkedin.com/in/apostolos-benisis
+If you have questions leave a comment at the tutorial [blog article](https://brokenrhythm.blog/gradle-gatling-springboot-automation).
+
+You can also reach me at my [LinkedIn profile](https://www.linkedin.com/in/apostolos-benisis).
