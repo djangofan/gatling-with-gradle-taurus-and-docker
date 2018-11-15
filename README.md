@@ -19,10 +19,17 @@ $ cd gatling-with-gradle-taurus-and-docker
 $ ./gradlew build
 ```
 
-##  How to run demo test load
+##  How to run demo test load standalone
 
 Start the test load with:
 ```
 $ ./gradlew testLoad
+```
+
+##  How to run demo test load in the Taurus harness
+
+Run this bash script to start the Taurus test harness:
+```
+$ ./startTaurus.sh
 ```
 
