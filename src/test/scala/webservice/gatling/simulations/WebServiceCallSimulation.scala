@@ -1,4 +1,4 @@
-package webservice.gatling.simulation
+package webservice.gatling.simulations
 
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
@@ -13,14 +13,14 @@ class WebServiceCallSimulation extends Simulation {
  val minWaitMs = 1000 milliseconds
  val maxWaitMs = 3000 milliseconds
 
- val baseURL = "http://localhost:8080"
+ val baseUrl = "http://localhost:8080"
  val baseName = "webservice-call-greeting"
  val requestName = baseName + "-request"
  val scenarioName = baseName + "-scenario"
  val URI = "/greeting"
 
  val httpConf = http
-  .baseURL(baseURL)
+  .baseUrl(baseUrl)
   .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8") // 6
   .doNotTrackHeader("1")
   .acceptLanguageHeader("en-US,en;q=0.5")
@@ -37,6 +37,5 @@ class WebServiceCallSimulation extends Simulation {
   }
  
  setUp(
-  scn.inject(rampUsers(noOfUsers) over (rampUpTimeSecs))
-  ).protocols(httpConf)
+  scn.inject(rampUsers(noOfUsers) during (rampUpTimeSecs seconds))).protocols(httpConf)
  }
