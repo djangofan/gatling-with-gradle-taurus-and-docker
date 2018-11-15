@@ -1,4 +1,4 @@
-package webservice.gatling
+package perf.gatling
 
 import ch.qos.logback.classic.{Level, LoggerContext}
 import io.gatling.app.Gatling
@@ -20,7 +20,7 @@ object Engine extends App {
   }
 
   val props = new GatlingPropertiesBuilder
-  props.simulationClass("webservice.gatling.simulations.WebServiceCallSimulation")
+  props.simulationClass("perf.gatling.simulations.ComputerWorld")
       .resourcesDirectory(IDEPathHelper.resourcesDirectory.toString)
       .resultsDirectory(IDEPathHelper.resultsDirectory.toString)
       .binariesDirectory(IDEPathHelper.mavenBinariesDirectory.toString)

@@ -1,4 +1,4 @@
-package webservice.gatling
+package perf.gatling
 
 import java.nio.file.Path
 

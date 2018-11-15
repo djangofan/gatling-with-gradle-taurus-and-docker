@@ -1,5 +1,4 @@
-import com.github.jengelman.gradle.plugins.processes.tasks.JavaFork
-import groovy.json.JsonSlurper
+// build.gradle
 
 buildscript {
     repositories {
@@ -9,23 +8,15 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.6.RELEASE'
-		classpath 'com.github.johnrengelman.processes:com.github.johnrengelman.processes.gradle.plugin:0.5.0'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
     }
 }
 
 plugins {
-    id "com.github.johnrengelman.processes" version "0.5.0"
-}
-
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'scala'
-apply plugin: 'com.github.johnrengelman.processes'
-
-jar {
-    baseName = 'gatling-perf'
-    version =  '1.0.0'
+    id 'java'
+    id 'scala'
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '4.0.2'
 }
 
 repositories {
@@ -34,68 +25,48 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+version = '1.0.0'
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-starter-actuator')
-	testCompile('io.gatling.highcharts:gatling-charts-highcharts:3.+')
+    testCompile 'org.scala-lang:scala-library:2.12.7'
+    testCompile 'io.gatling.highcharts:gatling-charts-highcharts:3.+'
 }
 
-task startSpringBoot(type: JavaFork) {
-    description = 'Start Spring Boot in the background.'
-    group = 'Load Test'
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'webservice.Application'
-}
-startSpringBoot.dependsOn assemble
-
-task stopSpringBoot << {
-    description = 'Stop the instance of Spring Boot that was started with \'startSpringBoot\''
-    group = 'performance'
-    startSpringBoot.processHandle.abort()
-}
-
-task waitUntilSpringBootIsUp << {
-    description = 'Call the /health endpoint and wait until it responds with the status UP.'
-	group = 'Load Test'
-    String url = 'http://localhost:8080/health'
-    boolean success = false
-    int count = 0
-    while (count < 15 && !success) {
-        println 'Trying to connect to \'' + url + '\' : Attempt number=' + count
-        try {
-            count += 1
-            JsonSlurper jsonSlurper = new JsonSlurper();
-            String responseBody = url.toURL().text
-            println responseBody
-            Object result = jsonSlurper.parseText(responseBody);
-            Map jsonResult = (Map) result;
-
-            String status = (String) jsonResult.get('status');
-
-            success = (status == 'UP')
-        } catch (all) {
-            sleep(5 * 1000) // wait for another 5 seconds until next retry
-        }
-    }
-    if (success) {
-        println 'SUCCEFULLY Connected to \'' + url + '\''
-    } else {
-        println 'FAILED to Connected to \'' + url + '\''
-    }
-}
-waitUntilSpringBootIsUp.dependsOn startSpringBoot
-
-task testLoad(type: JavaExec) {
-	description = 'Test load the Spring Boot web service with Gatling'
-	group = 'Load Test'
+task performance(type: JavaExec) {
+	description = 'Test performance of a service with Gatling'
+	group = 'verification'
 	classpath = sourceSets.test.runtimeClasspath
     jvmArgs = [
             "-Xmx2G"
     ]
 	main = 'webservice.gatling.Engine'
+    //mustRunAfter test
 }
 
-testLoad.dependsOn waitUntilSpringBootIsUp
-testLoad.finalizedBy stopSpringBoot
+jar {
+    baseName = 'performance'
+    version =  '1.0.0'
+    manifest {
+        attributes(
+                'Main-Class': 'perf.gatling.Engine'
+        )
+    }
+    from {
+        sourceSets.test.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
 
+shadowJar {
+    baseName = 'performance'
+    classifier = 'all'
+    version = version
+    configurations = [project.configurations.compile]
+    dependsOn compileTestScala
+}
+
+// task to run performance tests from executable jar
+task runFinalJar(type: JavaExec) {
+    classpath = files('build/libs/performance-all.jar')
+    //classpath += sourceSets.test.runtimeClasspath
+    //main = perf.gatling.Engine
+}
