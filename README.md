@@ -26,3 +26,9 @@ Start the test load with:
 $ ./gradlew testLoad
 ```
 
+## Other Info
+
+https://www.blazemeter.com/blog/how-integrate-docker-jenkins
+
+https://wiki.jenkins.io/display/JENKINS/Gatling+Plugin
+
