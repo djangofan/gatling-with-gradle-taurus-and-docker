@@ -4,35 +4,30 @@ import java.nio.file.{Path, Paths}
 
 object IDEPathHelper {
 
-	val gatlingConfUrl: Path = getConfigFilePath("gatling.conf")
+	val projectRootDir: String = Paths.get(".").toAbsolutePath.normalize.toString
+	val gatlingConfUrl: String = projectRootDir + "/gatling.conf"
 
-	//private def getConfigFile(fileName: String) : Path = {
-	//	try {
-	//		return getClass.getClassLoader.getResource(fileName)
-	//	} catch {
-	//			case e: Throwable =>
-	//			throw new java.lang.ExceptionInInitializerError("Missing config file '" + fileName + "' in classpath.")
-	//	}
-	//}
-
-	private def getConfigFilePath(fileName: String) : Path = {
-		return Paths.get(fileName)
-	}
-
-	val projectRootDir = gatlingConfUrl.p //refers to gatling-gradle-example/build folder
-
-	val mavenSourcesDirectory = projectRootDir / "src" / "test" / "scala"
-	val mavenResourcesDirectory = projectRootDir / "src" / "test" / "resources"
-	val mavenTargetDirectory = projectRootDir / "target"
-	val mavenBinariesDirectory = mavenTargetDirectory / "test-classes"
+	val mavenSourcesDirectory = projectRootDir + "/src/test/scala"
+	val mavenResourcesDirectory = projectRootDir + "/src/test/resources"
+	val mavenTargetDirectory = projectRootDir + "/target"
+	val mavenBinariesDirectory = mavenTargetDirectory + "/test-classes"
 
 	val resourcesDirectory = mavenResourcesDirectory
-	val simulationsDirectory = mavenSourcesDirectory / "simulations"
-	val dataDirectory = mavenResourcesDirectory / "data"
+	val simulationsDirectory = mavenSourcesDirectory + "/simulations"
+	val dataDirectory = mavenResourcesDirectory + "/data"
 
-	val resultsDirectory = mavenTargetDirectory / "gatling"
+	val resultsDirectory = mavenTargetDirectory + "/gatling"
 
-	val recorderConfigFile = mavenResourcesDirectory / "recorder.conf"
-	val recorderSimulationsDirectory = mavenSourcesDirectory / "recorded"
+	val recorderConfigFile = mavenResourcesDirectory + "/recorder.conf"
+	val recorderConfigFilePath: Path = Paths.get(recorderConfigFile)
+
+	val recorderSimulationsDirectory = mavenSourcesDirectory + "/recorded"
+
+	def main(args: Array[String]): Unit = {
+
+		println(projectRootDir)
+		println(gatlingConfUrl)
+
+	}
 
 }

@@ -10,5 +10,5 @@ object Recorder extends App {
 		.simulationPackage("gatling")
 		.resourcesFolder(IDEPathHelper.resourcesDirectory.toString)
 
-	GatlingRecorder.fromMap(props.build, Some(IDEPathHelper.recorderConfigFile))
+	GatlingRecorder.fromMap(props.build, Some(IDEPathHelper.recorderConfigFilePath))
 }
