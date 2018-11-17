@@ -40,7 +40,6 @@ task performance(type: JavaExec) {
             "-Xmx2G"
     ]
 	main = 'perf.gatling.Engine'
-    //mustRunAfter test
 }
 
 jar {
@@ -68,5 +67,8 @@ task runPerformanceJar(type: JavaExec) {
     group = 'verification'
     classpath = files('build/libs/performance-all.jar')
     classpath += sourceSets.main.runtimeClasspath
+    jvmArgs = [
+            "-Xmx2G"
+    ]
     main = 'perf.gatling.Engine'
 }
