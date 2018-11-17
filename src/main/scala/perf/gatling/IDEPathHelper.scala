@@ -1,23 +1,25 @@
 package perf.gatling
 
-import java.nio.file.Path
-
-import io.gatling.commons.util.PathHelper._
+import java.nio.file.{Path, Paths}
 
 object IDEPathHelper {
 
-	val gatlingConfUrl: Path = getConfigFile("gatling.conf")
+	val gatlingConfUrl: Path = getConfigFilePath("gatling.conf")
 
-	private def getConfigFile(fileName: String) : Path = {
-		try {
-			return getClass.getClassLoader.getResource(fileName)
-		} catch {
-				case e: Throwable =>
-				throw new java.lang.ExceptionInInitializerError("Missing config file " + fileName + " in resources.")
-		}
+	//private def getConfigFile(fileName: String) : Path = {
+	//	try {
+	//		return getClass.getClassLoader.getResource(fileName)
+	//	} catch {
+	//			case e: Throwable =>
+	//			throw new java.lang.ExceptionInInitializerError("Missing config file '" + fileName + "' in classpath.")
+	//	}
+	//}
+
+	private def getConfigFilePath(fileName: String) : Path = {
+		return Paths.get(fileName)
 	}
 
-	val projectRootDir = gatlingConfUrl.ancestor(3) //refers to gatling-gradle-example/build folder
+	val projectRootDir = gatlingConfUrl.p //refers to gatling-gradle-example/build folder
 
 	val mavenSourcesDirectory = projectRootDir / "src" / "test" / "scala"
 	val mavenResourcesDirectory = projectRootDir / "src" / "test" / "resources"

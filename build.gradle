@@ -25,17 +25,17 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-version = '1.0.0'
+version = 
 
 dependencies {
-    testCompile 'org.scala-lang:scala-library:2.12.7'
-    testCompile 'io.gatling.highcharts:gatling-charts-highcharts:3.+'
+    compile 'org.scala-lang:scala-library:2.12.7'
+    compile 'io.gatling.highcharts:gatling-charts-highcharts:3.+'
 }
 
 task performance(type: JavaExec) {
 	description = 'Test performance of a service with Gatling'
 	group = 'verification'
-	classpath = sourceSets.test.runtimeClasspath
+	classpath = sourceSets.main.runtimeClasspath
     jvmArgs = [
             "-Xmx2G"
     ]
@@ -52,7 +52,7 @@ jar {
         )
     }
     from {
-        sourceSets.test.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        sourceSets.main.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
@@ -61,12 +61,13 @@ shadowJar {
     classifier = 'all'
     version = version
     configurations = [project.configurations.compile]
-    dependsOn compileTestScala
+    dependsOn compileScala
 }
 
 // task to run performance tests from executable jar
-task runFinalJar(type: JavaExec) {
-    classpath = files('build/libs/performance-1.0.0-all.jar')
-    //classpath += sourceSets.test.runtimeClasspath
-    //main = perf.gatling.Engine
+task runPerformanceJar(type: JavaExec) {
+    group = 'verification'
+    classpath = files('build/libs/performance-all.jar')
+    classpath += sourceSets.main.runtimeClasspath
+    main = 'perf.gatling.Engine'
 }
