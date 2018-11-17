@@ -1,22 +1,21 @@
-version: '2'
+version: '3'
 
 services:
-
-  jenkins:
-    image: jenkins/jenkins
-    container_name: jenkins
-    ports:
-      - 8081:8080
-      - 50000:50000
-    volumes:
-      - ./jenkins:/var/jenkins_home/
 
   taurus:
     image: blazemeter/taurus
     container_name: taurus
     command: performance.yml
     volumes:
-      - ./build/libs/gatling-perf-1.0.0.jar:/bzt-configs/gatling-perf-1.0.0.jar
+      - ./build/libs/performance-all.jar:/bzt-configs/peformance-all.jar
       - ./performance.yml:/bzt-configs/performance.yml
-      - ./artifacts:/tmp/artifacts
+      - ./target/gatling/artifacts:/tmp/artifacts
 
+  jenkins:
+    image: jenkins/jenkins
+    container_name: jenkins
+    ports:
+    - 8081:8080
+    - 50000:50000
+    volumes:
+    - ./jenkins:/var/jenkins_home/

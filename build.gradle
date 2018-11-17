@@ -39,7 +39,7 @@ task performance(type: JavaExec) {
     jvmArgs = [
             "-Xmx2G"
     ]
-	main = 'webservice.gatling.Engine'
+	main = 'perf.gatling.Engine'
     //mustRunAfter test
 }
 
@@ -64,7 +64,6 @@ shadowJar {
     dependsOn compileScala
 }
 
-// task to run performance tests from executable jar
 task runPerformanceJar(type: JavaExec) {
     group = 'verification'
     classpath = files('build/libs/performance-all.jar')
