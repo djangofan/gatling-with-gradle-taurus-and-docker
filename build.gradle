@@ -15,7 +15,7 @@ buildscript {
 plugins {
     id 'java'
     id 'scala'
-    id 'idea'
+    id 'idea' // also need IntelliJ-IDEA Scala plugin
     id 'com.github.johnrengelman.shadow' version '4.0.2'
 }
 
