@@ -1,0 +1,21 @@
+---
+execution:
+- executor: gatling
+  scenario: computerworld
+
+  concurrency: 100
+  ramp-up: 30s
+  steps: 5
+  hold-for: 2m
+
+  locations:
+    us-east-1: 50
+    us-west-1: 50
+
+scenarios:
+  computerworld:
+    script: perf/gatling/simulations/ComputerWorld.scala
+    additional-classpath:
+      - /bzt-configs/peformance-all.jar
+    simulation: perf.gatling.simulations.ComputerWorld
+

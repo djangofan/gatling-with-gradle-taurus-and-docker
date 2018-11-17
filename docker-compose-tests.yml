@@ -11,11 +11,11 @@ services:
       - ./performance.yml:/bzt-configs/performance.yml
       - ./target/gatling/artifacts:/tmp/artifacts
 
-  jenkins:
-    image: jenkins/jenkins
-    container_name: jenkins
-    ports:
-    - 8081:8080
-    - 50000:50000
-    volumes:
-    - ./jenkins:/var/jenkins_home/
+#  jenkins:
+#    image: jenkins/jenkins
+#    container_name: jenkins
+#    ports:
+#    - 8081:8080
+#    - 50000:50000
+#    volumes:
+#    - ./jenkins:/var/jenkins_home/
